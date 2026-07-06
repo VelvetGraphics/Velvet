@@ -1,9 +1,9 @@
 #pragma once
 
 namespace Velvet {
-    class Main
+    class Main final
     {
     public:
-        static void Execute();
+        static void Execute(int argc, char** argv);
     };
 } // namespace Velvet

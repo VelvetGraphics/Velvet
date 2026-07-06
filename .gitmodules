@@ -1,0 +1,3 @@
+[submodule "Velvet/Vendor/entt"]
+	path = Velvet/Vendor/entt
+	url = https://github.com/skypjack/entt.git
