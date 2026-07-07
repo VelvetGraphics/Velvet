@@ -1,13 +1,15 @@
 #pragma once
 #include "Velvet/Common/CommonInclude.hpp"
 #include "Velvet/Main/ApplicationState.hpp"
+#include "Velvet/Main/Event.hpp"
+#include "Velvet/Main/GlfwWindow.hpp"
 #include "Velvet/Main/Layer.hpp"
 
 namespace Velvet {
     struct ApplicationCreateInfo
     {
         ApplicationState::State CreationState = ApplicationState::None;
-        std::vector<Layer*> Layers;
+        bool* restart;
     };
 
     class Application
@@ -28,6 +30,16 @@ namespace Velvet {
 
         static Application* Instance() { return s_Instance; }
 
+        void Close() { m_Running = false; }
+        void Restart() const
+        {
+            *m_ShouldRestart = true;
+            s_Instance = nullptr;
+        }
+
+        EventBus& GetEventBus() { return m_EventBus; }
+        void ForwardEvent(Scope<Event>&& e) { m_EventBus.Queue(std::move(e)); }
+
     protected:
         Application(ApplicationCreateInfo&& createInfo);
 
@@ -36,17 +48,20 @@ namespace Velvet {
 
         std::vector<Layer*> m_Layers;
 
+        Ref<GlfwWindow> m_Window = nullptr;
+        EventBus m_EventBus;
+
     private:
-        static Application* Create();
+        static Application* Create(int argc, char** argv, bool* restart);
         static void Destroy() { s_Instance = nullptr; }
 
         void Run();
-        void Close() { m_Running = false; }
 
     private:
         inline static Application* s_Instance = nullptr;
 
         bool m_Running = true;
+        bool* m_ShouldRestart = nullptr;
 
         friend class Main;
     };

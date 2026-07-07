@@ -5,12 +5,29 @@
 namespace Velvet {
     void Main::Execute(int argc, char** argv)
     {
-        // TODO: Restart
-        // TODO: pass argc and argv
+       bool start = true;
 
-        Application* Application = Application::Create();
-        Application->Run();
-        Application::Destroy();
+        while (start)
+        {
+            start = false;
+
+            CreateContext();
+            Application* Application = Application::Create(argc, argv, &start);
+            Application->Run();
+            Application::Destroy();
+            DestroyContext();
+        }
+    }
+
+    void Main::CreateContext()
+    {
+        // TODO: Assertions
+        GlfwWindow::CreateContext();
+    }
+
+    void Main::DestroyContext()
+    {
+        GlfwWindow::DestroyContext();
     }
 } // namespace Velvet
 

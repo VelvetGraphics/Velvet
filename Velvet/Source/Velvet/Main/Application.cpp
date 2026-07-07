@@ -1,7 +1,20 @@
 #include "Application.hpp"
 
+#include "Velvet/Events/WindowEvent.hpp"
+
 namespace Velvet {
-    Application::Application(ApplicationCreateInfo&& createInfo) { m_Layers = std::move(createInfo.Layers); }
+    Application::Application(ApplicationCreateInfo&& createInfo)
+    {
+        m_CurrentState = createInfo.CreationState;
+        m_ShouldRestart = createInfo.restart;
+
+        WindowProperties windowProps = {};
+        windowProps.Width = 1280;
+        windowProps.Height = 720;
+        m_Window = Ref<GlfwWindow>::Create(windowProps);
+
+        m_EventBus.Subscribe<WindowClosedEvent>([this](Event& e) -> void { Close(); });
+    }
 
     Application::~Application()
     {
@@ -16,9 +29,14 @@ namespace Velvet {
     {
         while (m_Running)
         {
+            // TODO: Fixed update
+
             for (Layer* layer : m_Layers)
                 if (layer->MeetsRequirements())
                     layer->OnUpdate();
+
+            GlfwWindow::PollEvents();
+            m_EventBus.Dispatch();
         }
     }
 
@@ -26,5 +44,11 @@ namespace Velvet {
     {
         layer->OnAttach();
         m_Layers.push_back(layer);
+    }
+
+    void Application::PopLayer(Layer* layer)
+    {
+        layer->OnDetach();
+        erase_if(m_Layers, [&](Layer* lyr) { return layer == lyr; });
     }
 } // namespace Velvet

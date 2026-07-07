@@ -4,18 +4,25 @@ project(Velvet)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 file(GLOB_RECURSE VELVET_SOURCE CONFIGURE_DEPENDS
         Velvet/Source/Velvet/*.cpp
 )
 
 add_library(Velvet STATIC ${VELVET_SOURCE} Velvet/Include/Velvet/Velvet.hpp)
+add_subdirectory(Velvet/Vendor/GLFW)
 
 target_include_directories(Velvet PUBLIC
         Velvet/Include
         Velvet/Source
 
+        Velvet/Vendor/GLFW/include
         Velvet/Vendor/entt/single_include
+)
+
+target_link_libraries(Velvet PUBLIC
+        glfw
 )
 
 # Tests
