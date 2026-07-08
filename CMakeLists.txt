@@ -13,17 +13,33 @@ file(GLOB_RECURSE VELVET_SOURCE CONFIGURE_DEPENDS
 add_library(Velvet STATIC ${VELVET_SOURCE} Velvet/Include/Velvet/Velvet.hpp)
 add_subdirectory(Velvet/Vendor/GLFW)
 
+target_compile_options(Velvet PUBLIC
+        "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>"
+)
+add_subdirectory(Velvet/Vendor/spdlog)
+
 target_include_directories(Velvet PUBLIC
         Velvet/Include
         Velvet/Source
 
         Velvet/Vendor/GLFW/include
         Velvet/Vendor/entt/single_include
+        Velvet/Vendor/spdlog/include
 )
 
 target_link_libraries(Velvet PUBLIC
         glfw
 )
+
+if (WIN32)
+    target_compile_definitions(Velvet PUBLIC
+            VELVET_PLATFORM_WINDOWS=1
+            VELVET_PLATFORM_USE_GLFW=1
+            VELVET_PLATFORM_USE_VULKAN=1
+    )
+else ()
+    message(FATAL_ERROR "Velvet does NOT support this platform")
+endif ()
 
 # Tests
 include(FetchContent)

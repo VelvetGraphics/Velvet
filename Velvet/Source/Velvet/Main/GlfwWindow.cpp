@@ -1,3 +1,5 @@
+#if VELVET_PLATFORM_USE_GLFW
+
 #include "GlfwWindow.hpp"
 
 #include "Velvet/Main/Application.hpp"
@@ -165,3 +167,5 @@ namespace Velvet {
         });
     }
 } // namespace Velvet
+
+#endif

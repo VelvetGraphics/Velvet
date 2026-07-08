@@ -44,7 +44,7 @@ public:
     ~SandboxApplication() override { m_CurrentState = Velvet::ApplicationState::Destroy; }
 };
 
-Velvet::Application* Velvet::Application::Create(int argc, char** argv, bool* restart)
+Velvet::Application* Velvet::Application::Create(const std::vector<std::string>& arguments, bool* restart)
 {
     Velvet::ApplicationCreateInfo createInfo = {};
     createInfo.CreationState = ApplicationState::Init;

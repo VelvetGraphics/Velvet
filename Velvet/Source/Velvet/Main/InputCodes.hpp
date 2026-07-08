@@ -63,7 +63,7 @@ namespace Velvet {
             TAB = 258,
             BACKSPACE = 259,
             INSERT = 260,
-            DELETE = 261,
+            KDELETE = 261,
             RIGHT = 262,
             LEFT = 263,
             DOWN = 264,

@@ -1,4 +1,6 @@
 #pragma once
+#if VELVET_PLATFORM_USE_GLFW
+
 #include "GLFW/glfw3.h"
 #include "Velvet/Common/CommonInclude.hpp"
 #include "Velvet/Main/Event.hpp"
@@ -39,6 +41,7 @@ namespace Velvet {
 
     private:
         void SetEventCallbacks() const;
+
     private:
         struct WindowData
         {
@@ -56,7 +59,8 @@ namespace Velvet {
             std::function<void(Scope<Event>&&)> EventCallback = nullptr;
         } m_Data;
 
-
         GLFWwindow* m_Window = nullptr;
     };
 } // namespace Velvet
+
+#endif

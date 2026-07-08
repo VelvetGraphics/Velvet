@@ -52,7 +52,7 @@ namespace Velvet {
         EventBus m_EventBus;
 
     private:
-        static Application* Create(int argc, char** argv, bool* restart);
+        static Application* Create(const std::vector<std::string>& arguments, bool* restart);
         static void Destroy() { s_Instance = nullptr; }
 
         void Run();
